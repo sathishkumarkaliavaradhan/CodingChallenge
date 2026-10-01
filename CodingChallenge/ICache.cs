@@ -12,7 +12,10 @@ namespace CodingChallenge
         /// Retrieves the value associated with the specified key from the cache.
         /// </summary>
         /// <param name="key">The key whose value should be retrieved.</param>
-        /// <returns>The value associated with the key, or null if the key does not exist.</returns>
+        /// <returns>
+        /// The value associated with the key. If the key does not exist, implementations
+        /// in this repository return an empty string (string.Empty).
+        /// </returns>
         string Get(int key);
 
         /// <summary>
