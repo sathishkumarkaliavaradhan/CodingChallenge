@@ -8,19 +8,6 @@ namespace CodingChallenge
     {
         // Tracks whether Dispose has been called.
         private bool _disposed;
-
-        /// <summary>
-        /// Throws <see cref="ObjectDisposedException"/> when the cache has been disposed.
-        /// </summary>
-        /// <exception cref="ObjectDisposedException" />
-        private void ThrowIfDisposed()
-        {
-            if (_disposed)
-            {
-                throw new ObjectDisposedException(nameof(LRUCache));
-            }
-        }
-
         private readonly int _capacity;
         private readonly Dictionary<int, LinkedListNode<CacheItem>> _cache;
         // _lruList keeps items ordered from most-recently-used (First) to least-recently-used (Last).
@@ -53,7 +40,6 @@ namespace CodingChallenge
         /// <exception cref="ObjectDisposedException">Thrown if the cache has been disposed.</exception>
         public string Get(int key)
         {
-            ThrowIfDisposed();
             // Use an upgradeable read lock: allows concurrent reads but enables promoting
             // to a write lock when we need to update the node ordering.
             _rwLock.EnterUpgradeableReadLock();
@@ -86,7 +72,6 @@ namespace CodingChallenge
         /// <exception cref="ObjectDisposedException">Thrown if the cache has been disposed.</exception>
         public void Put(int key, string value)
         {
-            ThrowIfDisposed();
             // Delegate to internal method that acquires a write lock and performs
             // insert/update/eviction logic.
             UpdateCacheAndList(key, value);
@@ -98,7 +83,6 @@ namespace CodingChallenge
         /// <exception cref="ObjectDisposedException">Thrown if the cache has been disposed.</exception>
         public void Clear()
         {
-            ThrowIfDisposed();
             _rwLock.EnterWriteLock();
             try
             {
